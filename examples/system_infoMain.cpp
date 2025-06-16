@@ -134,6 +134,15 @@ int main(int argc, char** argv) {
              "serial-number:", main_board.serialNumber());
   // clang-format on
 
+  hwinfo::ComputerSystem computer_system;
+  // clang-format off
+  fmt::print("------------------------------- Computer System --------------------------------\n"
+             "{:<20} {}\n"
+             "{:<20} {}\n",
+             "manufacturer:", computer_system.manufacturer(),
+             "model:", computer_system.model());
+  // clang-format on
+
   std::vector<hwinfo::Battery> batteries = hwinfo::getAllBatteries();
 
   fmt::print("------------------------------- Batteries ---------------------------------\n");

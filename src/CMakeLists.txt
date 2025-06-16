@@ -186,6 +186,41 @@ if (HWINFO_MAINBOARD)
 endif ()
 # ______________________________________________________________________________________________________________________
 
+# ----- ComputerSystem ------------------------------------------------------------------------------------------------------
+if (HWINFO_COMPUTER)
+    set(COMPUTER_SRC_FILES
+            computer_system.cpp
+            apple/computer_system.cpp
+            linux/computer_system.cpp
+            windows/computer_system.cpp
+
+            windows/utils/wmi_wrapper.cpp
+            apple/utils/filesystem.cpp
+            linux/utils/filesystem.cpp
+    )
+
+    add_library(hwinfo_computer ${HWINFO_BUILD} ${COMPUTER_SRC_FILES})
+    if(${HWINFO_SHARED})
+        target_compile_definitions(hwinfo_computer PUBLIC -DHWINFO_EXPORTS)
+    endif()
+    target_include_directories(hwinfo_computer PUBLIC $<BUILD_INTERFACE:${HWINFO_INCLUDE_DIR}> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+    if(APPLE)
+        target_link_libraries(hwinfo_computer PRIVATE "-framework IOKit" "-framework CoreFoundation")
+    endif()
+
+    target_link_libraries(hwinfo INTERFACE hwinfo_computer)
+
+    set_target_properties(hwinfo_computer PROPERTIES OUTPUT_NAME "hwinfo_computer")
+
+    install(TARGETS hwinfo_computer
+            EXPORT lfreist-hwinfoTargets
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib
+            RUNTIME DESTINATION bin)
+    install(FILES ${HWINFO_INCLUDE_DIR}/hwinfo/computer_system.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hwinfo)
+endif ()
+# ______________________________________________________________________________________________________________________
+
 # ----- OS -------------------------------------------------------------------------------------------------------------
 if (HWINFO_OS)
     set(OS_SRC_FILES

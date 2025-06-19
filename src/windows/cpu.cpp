@@ -91,12 +91,13 @@ std::vector<double> CPU::threadsUtilisation() const {
 std::vector<CPU> getAllCPUs() {
   utils::WMI::_WMI wmi;
   const std::wstring query_string(
-      L"SELECT Name, Manufacturer, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed, L2CacheSize, L3CacheSize "
+      L"SELECT Name, Manufacturer, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed, L2CacheSize, L3CacheSize, Architecture "
       L"FROM Win32_Processor");
   bool success = wmi.execute_query(query_string);
   if (!success) {
     return {};
   }
+
   std::vector<CPU> cpus;
 
   ULONG u_return = 0;
@@ -114,6 +115,23 @@ std::vector<CPU> getAllCPUs() {
     hr = obj->Get(L"Name", 0, &vt_prop, nullptr, nullptr);
     if (SUCCEEDED(hr) && (V_VT(&vt_prop) == VT_BSTR)) {
       cpu._modelName = utils::wstring_to_std_string(vt_prop.bstrVal);
+    }
+    hr = obj->Get(L"Architecture", 0, &vt_prop, nullptr, nullptr);
+    if (SUCCEEDED(hr)) {
+      switch (vt_prop.uintVal) {
+        case 0:
+          cpu._architecture = "x86";
+          break;
+        case 9:
+          cpu._architecture = "x86_64";
+          break;
+        case 12:
+          cpu._architecture = "arm64";
+          break;
+        default:
+          cpu._architecture = "Unknown";
+          break;
+      }
     }
     hr = obj->Get(L"Manufacturer", 0, &vt_prop, nullptr, nullptr);
     if (SUCCEEDED(hr) && (V_VT(&vt_prop) == VT_BSTR)) {

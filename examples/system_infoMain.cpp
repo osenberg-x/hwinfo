@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
                cpu.id(),
                "vendor:", cpu.vendor(),
                "model:", cpu.modelName(),
+               "architecture:", cpu.architecture(),
                "physical cores:", cpu.numPhysicalCores(),
                "logical cores:", cpu.numLogicalCores(),
                "max frequency:", cpu.maxClockSpeed_MHz(),

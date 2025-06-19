@@ -18,6 +18,9 @@ const std::string& CPU::modelName() const { return _modelName; }
 const std::string& CPU::vendor() const { return _vendor; }
 
 // _____________________________________________________________________________________________________________________
+const std::string& CPU::architecture() const { return _architecture; }
+
+// _____________________________________________________________________________________________________________________
 int64_t CPU::L1CacheSize_Bytes() const { return _L1CacheSize_Bytes; }
 
 // _____________________________________________________________________________________________________________________

@@ -38,6 +38,7 @@ class HWINFO_API CPU {
   int id() const;
   const std::string& modelName() const;
   const std::string& vendor() const;
+  const std::string& architecture() const;
   int64_t L1CacheSize_Bytes() const;
   int64_t L2CacheSize_Bytes() const;
   int64_t L3CacheSize_Bytes() const;
@@ -62,6 +63,7 @@ class HWINFO_API CPU {
   int _id{-1};
   std::string _modelName;
   std::string _vendor;
+  std::string _architecture;
   int _numPhysicalCores{-1};
   int _numLogicalCores{-1};
   int64_t _maxClockSpeed_MHz{-1};
